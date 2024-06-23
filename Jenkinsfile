@@ -21,13 +21,15 @@ pipeline {
                     sh "git config --global user.email 'hajinkim811@gmail.com'"
 
                     // GitHub 저장소 클론 (이미 클론된 경우 생략 가능)
-                    sh "git clone ${GIT_REPO_URL}"
+                    dir("${WORKSPACE}/jenkins") {
+                        sh "git pull origin main"  // 최신 코드를 가져오기 위해 pull 수행
+                    }
 
                     // values.yaml 파일 수정
-                    sh "sed -i 's/imageTag: .*/imageTag: ${IMAGE_TAG}/g' jenkins/web-helm/values.yaml"
+                    sh "sed -i 's/imageTag: .*/imageTag: ${IMAGE_TAG}/g' ${WORKSPACE}/jenkins/web-helm/values.yaml"
 
                     // Git 작업
-                    dir('jenkins') {
+                    dir("${WORKSPACE}/jenkins") {
                         sh "git add web-helm/values.yaml"
                         sh "git commit -m 'Update imageTag to ${IMAGE_TAG}'"
                         sh "git push origin main"  // main 브랜치로 푸시
