@@ -38,13 +38,13 @@ pipeline {
             steps {
                 script {
                     // Configure Git user
-                    sh "git config --global user.name 'khj811'"
-                    sh "git config --global user.email 'hajinkim811@gmail.com'"
+                    sh "cd jenkins && git config --global user.name 'khj811'"
+                    sh "cd jenkins && git config --global user.email 'hajinkim811@gmail.com'"
 
 
                     // Update the image tag in values.yaml and push changes to the repository
-                    sh "git pull origin main"
-                    sh "sed -i 's/imageTag: .*/imageTag: ${BUILD_NUMBER}/g' jenkins/web-helm/values.yaml"
+                    sh "cd jenkins && git pull origin main"
+                    sh "cd jenkins && sed -i 's/imageTag: .*/imageTag: ${BUILD_NUMBER}/g' jenkins/web-helm/values.yaml"
                     sh "git add jenkins/web-helm/values.yaml"
                     sh "cd jenkins && git commit -m 'Update imageTag to ${BUILD_NUMBER}' || echo 'No changes to commit'"
                     sh "cd jenkins && git push origin main"
