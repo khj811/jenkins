@@ -47,7 +47,7 @@ pipeline {
                     sh "cd jenkins && sed -i 's/imageTag: .*/imageTag: ${BUILD_NUMBER}/g' jenkins/web-helm/values.yaml"
                     sh "git add jenkins/web-helm/values.yaml"
                     sh "cd jenkins && git commit -m 'Update imageTag to ${BUILD_NUMBER}' || echo 'No changes to commit'"
-                    sh "cd jenkins && git push origin main"
+                    sh "cd jenkins && git push origin main --force"
                 }
             }
         }
