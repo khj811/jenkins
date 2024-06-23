@@ -37,6 +37,8 @@ pipeline {
                         branches: [[name: '*/main']],
                         userRemoteConfigs: [[url: "${GIT_REPO_URL}", credentialsId: "${GIT_CREDENTIALS_ID}"]]
                     ])
+                    sh "git config --local user.email "hajinkim811@gmail.com""
+                    sh "git config --global user.name "khj811""
                     sh "sed -i 's/imageTag: .*/imageTag: ${IMAGE_TAG}/g' web-helm/values.yaml"
                     sh "git add web-helm/values.yaml"
                     sh "git commit -m 'Update imageTag to ${IMAGE_TAG}'"
