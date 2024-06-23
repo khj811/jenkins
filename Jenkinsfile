@@ -9,7 +9,7 @@ pipeline {
         DOCKER_IMAGE_NAME = 'web-intro'
         GIT_REPO_URL = 'https://github.com/khj811/jenkins.git'
         IMAGE_TAG = "${BUILD_NUMBER}"
-        NEW_BRANCH_NAME = 'jks'  // 새로운 브랜치 이름
+        BRANCH_NAME = 'main'  // 새로운 브랜치 이름
         GIT_CREDENTIALS_ID = 'github-token'  // Jenkins에서 설정한 HTTPS credentials ID
     }
 
@@ -38,10 +38,11 @@ pipeline {
                         branches: [[name: "${NEW_BRANCH_NAME}"]],
                         userRemoteConfigs: [[url: "${GIT_REPO_URL}", credentialsId: "${GIT_CREDENTIALS_ID}"]]
                     ])
+                    sh "git pull origin ${BRANCH_NAME}"
                     sh "sed -i 's/imageTag: .*/imageTag: ${IMAGE_TAG}/g' web-helm/values.yaml"
                     sh "git add web-helm/values.yaml"
                     sh "git commit -m 'Update imageTag to ${IMAGE_TAG}'"
-                    sh "git push origin ${NEW_BRANCH_NAME}"  // 새로운 브랜치로 푸시
+                    sh "git push origin ${BRANCH_NAME}"  // 새로운 브랜치로 푸시
                 }
             }
         }
