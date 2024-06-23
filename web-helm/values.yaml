@@ -24,4 +24,4 @@ hpa:
 
 apps:
   - name: web-intro
-    imageTag: 23
+    imageTag: 0
