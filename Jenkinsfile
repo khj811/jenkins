@@ -17,8 +17,8 @@ pipeline {
             steps {
                 script {
                     // Git 사용자 설정
-                    sh "git config --global user.name khj811"
-                    sh "git config --global user.email hajinkim811@gmail.com"
+                    sh "git config --global user.name "khj811""
+                    sh "git config --global user.email "hajinkim811@gmail.com""
 
                     // GitHub 저장소 클론 (이미 클론된 경우 생략 가능)
                     sh "git clone ${GIT_REPO_URL}"
