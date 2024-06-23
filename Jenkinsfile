@@ -20,8 +20,11 @@ pipeline {
                     sh "git config --global user.name 'khj811'"
                     sh "git config --global user.email 'hajinkim811@gmail.com'"
 
-                    // GitHub 저장소 클론 (이미 클론된 경우 생략 가능)
-                    sh "git clone ${GIT_REPO_URL}"
+                    // 디렉토리 확인 후 초기화
+                    if (!fileExists('jenkins')) {
+                        sh "rm -rf jenkins"  // 기존 디렉토리 삭제
+                    }
+                    sh "git clone ${GIT_REPO_URL}"  // 클론 진행
 
                     // values.yaml 파일 수정
                     dir('jenkins') {
