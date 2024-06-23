@@ -20,7 +20,7 @@ pipeline {
                     // AWS Credentials로 Docker에 로그인
                     withCredentials([[
                         $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: '4bdcbad7-61ab-479b-ba29-3b8d6ccfbb89', // AWS Credentials Plugin에서 설정한 credentialsId 입력
+                        credentialsId: 'd2e00785-2f10-4d6c-b139-beae14ae8072', // AWS Credentials Plugin에서 설정한 credentialsId 입력
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
