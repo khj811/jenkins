@@ -5,10 +5,11 @@ pipeline {
         AWS_DEFAULT_REGION = 'ap-northeast-2'
         AWS_ACCOUNT_ID = '471112853004'
         ECR_REPOSITORY = 'web-intro'
-        IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKERFILE_PATH = 'Dockerfile'
         DOCKER_IMAGE_NAME = 'web-intro'
-        VALUES_FILE = 'web-helm/values.yaml'
+        GIT_REPO_URL = 'git@github.com:khj811/jenkins.git'  // GitHub 레포지토리 SSH URL
+        GIT_CREDENTIALS_ID = 'jenkins'  // Jenkins에서 설정한 SSH private key credentials ID
+        IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
     stages {
@@ -29,10 +30,17 @@ pipeline {
                         sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
                         sh "docker tag ${DOCKER_IMAGE_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY}:${IMAGE_TAG}"
                         sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY}:${IMAGE_TAG}"
-
-                        // values.yaml 파일 내 IMAGE_TAG 값 변경
-                        sh "sed -i 's/imageTag: .*/imageTag: ${IMAGE_TAG}/g' ${VALUES_FILE}"
                     }
+
+                    // Git 명령어를 사용하여 values.yaml 파일 내의 이미지 버전 변경
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        userRemoteConfigs: [[url: "${GIT_REPO_URL}", credentialsId: "${GIT_CREDENTIALS_ID}"]]
+                    ])
+                    sh "sed -i 's/imageTag: .*/imageTag: ${IMAGE_TAG}/g' web-helm/values.yaml"
+                    sh "git add web-helm/values.yaml"
+                    sh "git commit -m 'Update imageTag to ${IMAGE_TAG}'"
+                    sh "git push origin main"
                 }
             }
         }
