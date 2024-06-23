@@ -7,8 +7,7 @@ pipeline {
         ECR_REPOSITORY = 'web-intro'
         DOCKERFILE_PATH = 'Dockerfile'
         DOCKER_IMAGE_NAME = 'web-intro'
-        GIT_REPO_URL = 'git@github.com:khj811/jenkins.git'  // GitHub 레포지토리 SSH URL
-        GIT_CREDENTIALS_ID = 'jenkins'  // Jenkins에서 설정한 SSH private key credentials ID
+        GIT_REPO_URL = 'https://github.com/khj811/jenkins.git'  // GitHub 레포지토리 HTTPS URL
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
@@ -20,12 +19,12 @@ pipeline {
                     def customImage = docker.build("${DOCKER_IMAGE_NAME}:${IMAGE_TAG}", "--no-cache=true -f ${DOCKERFILE_PATH} .")
 
                     // AWS Credentials로 Docker에 로그인
-                    withCredentials([
-                        [$class: 'AmazonWebServicesCredentialsBinding',
-                         credentialsId: 'd2e00785-2f10-4d6c-b139-beae14ae8072', // AWS Credentials Plugin에서 설정한 credentialsId 입력
-                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
-                    ]) {
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'd2e00785-2f10-4d6c-b139-beae14ae8072', // AWS Credentials Plugin에서 설정한 credentialsId 입력
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]]) {
                         // AWS ECR에 로그인 및 이미지 푸시
                         sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
                         sh "docker tag ${DOCKER_IMAGE_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY}:${IMAGE_TAG}"
@@ -34,12 +33,9 @@ pipeline {
 
                     // Git 명령어를 사용하여 values.yaml 파일 내의 이미지 버전 변경
                     checkout([$class: 'GitSCM',
-                        branches: [[name: '*/main']],
-                        userRemoteConfigs: [[url: "${GIT_REPO_URL}", credentialsId: "${GIT_CREDENTIALS_ID}"]]
+                        branches: [[name: 'main']],  // GitHub의 기본 브랜치 이름인 main을 사용합니다.
+                        userRemoteConfigs: [[url: "${GIT_REPO_URL}"]]  // Credentials ID는 사용하지 않습니다.
                     ])
-
-                    sh 'git config --local user.email "hajinkim811@gmail.com"'
-                    sh 'git config --global user.name "khj811"'
                     sh "sed -i 's/imageTag: .*/imageTag: ${IMAGE_TAG}/g' web-helm/values.yaml"
                     sh "git add web-helm/values.yaml"
                     sh "git commit -m 'Update imageTag to ${IMAGE_TAG}'"
