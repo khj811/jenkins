@@ -7,9 +7,9 @@ pipeline {
         ECR_REPOSITORY = 'web-intro'
         DOCKERFILE_PATH = 'Dockerfile'
         DOCKER_IMAGE_NAME = 'web-intro'
-        GIT_REPO_URL = 'https://github.com/khj811/jenkins.git'  // GitHub 레포지토리 HTTPS URL
+        GIT_REPO_URL = 'https://github.com/khj811/jenkins.git'
         IMAGE_TAG = "${BUILD_NUMBER}"
-        GIT_CREDENTIALS_ID = 'github-token'  // Jenkins에서 설정한 SSH 또는 HTTPS credentials ID
+        GIT_CREDENTIALS_ID = 'github-token'  // Jenkins에서 설정한 HTTPS credentials ID
     }
 
     stages {
