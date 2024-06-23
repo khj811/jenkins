@@ -9,7 +9,7 @@ pipeline {
         DOCKER_IMAGE_NAME = 'web-intro'
         GIT_REPO_URL = 'https://github.com/khj811/jenkins.git'
         IMAGE_TAG = "${BUILD_NUMBER}"
-        NEW_BRANCH_NAME = 'main'  // 수정: 새로운 브랜치 이름 지정
+        NEW_BRANCH_NAME = 'jenkins'  // 수정: 새로운 브랜치 이름 지정
         GIT_CREDENTIALS_ID = 'github-token'  // Jenkins에서 설정한 HTTPS credentials ID
     }
 
