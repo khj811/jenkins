@@ -9,6 +9,7 @@ pipeline {
         DOCKER_IMAGE_NAME = 'web-intro'
         GIT_REPO_URL = 'https://github.com/khj811/jenkins.git'  // GitHub 레포지토리 HTTPS URL
         IMAGE_TAG = "${BUILD_NUMBER}"
+        GIT_CREDENTIALS_ID = 'jenkins'  // Jenkins에서 설정한 SSH 또는 HTTPS credentials ID
     }
 
     stages {
@@ -33,8 +34,8 @@ pipeline {
 
                     // Git 명령어를 사용하여 values.yaml 파일 내의 이미지 버전 변경
                     checkout([$class: 'GitSCM',
-                        branches: [[name: 'main']],  // GitHub의 기본 브랜치 이름인 main을 사용합니다.
-                        userRemoteConfigs: [[url: "${GIT_REPO_URL}"]]  // Credentials ID는 사용하지 않습니다.
+                        branches: [[name: 'main']],
+                        userRemoteConfigs: [[url: "${GIT_REPO_URL}", credentialsId: "${GIT_CREDENTIALS_ID}"]]
                     ])
                     sh "sed -i 's/imageTag: .*/imageTag: ${IMAGE_TAG}/g' web-helm/values.yaml"
                     sh "git add web-helm/values.yaml"
