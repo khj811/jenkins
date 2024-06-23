@@ -19,24 +19,12 @@ pipeline {
                     sh "git config --global user.name 'khj811'"
                     sh "git config --global user.email 'hajinkim811@gmail.com'"
 
-                    // Check if repository is already cloned
-                    def repoDir = "${WORKSPACE}/jenkins"
-                    def repoExists = file("${repoDir}").exists()
-
-                    // Clone GitHub repository only if not already cloned
-                    if (!repoExists) {
-                        sh "git clone ${GIT_REPO_URL} ${repoDir}"
-                    } else {
-                        echo "Repository already cloned at ${repoDir}"
-                    }
-
-                    // Update values.yaml file
-                    dir("${repoDir}/web-helm") {
-                        sh "sed -i 's/imageTag: .*/imageTag: ${BUILD_NUMBER}/g' values.yaml"
-                        sh "git add values.yaml"
-                        sh "git commit -m 'Update imageTag to ${BUILD_NUMBER}'"
-                        sh "git push origin main"
-                    }
+                    sh "git pull origin main"
+                    sh "sed -i 's/imageTag: .*/imageTag: ${BUILD_NUMBER}/g' values.yaml"
+                    sh "git add values.yaml"
+                    sh "git commit -m 'Update imageTag to ${BUILD_NUMBER}'"
+                    sh "git push origin main"
+                    
                 }
             }
         }
