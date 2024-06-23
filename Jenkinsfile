@@ -43,7 +43,7 @@ pipeline {
 
 
                     // Update the image tag in values.yaml and push changes to the repository
-                    sh "cd jenkins && git pull origin main"
+                    sh "cd jenkins && git pull origin main --rebase"
                     sh "cd jenkins && sed -i 's/imageTag: .*/imageTag: ${BUILD_NUMBER}/g' jenkins/web-helm/values.yaml"
                     sh "git add jenkins/web-helm/values.yaml"
                     sh "cd jenkins && git commit -m 'Update imageTag to ${BUILD_NUMBER}' || echo 'No changes to commit'"
