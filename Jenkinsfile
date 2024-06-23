@@ -21,7 +21,7 @@ pipeline {
 
                     // Check if repository is already cloned
                     def repoDir = "${WORKSPACE}/jenkins"
-                    def repoExists = fileExists(repoDir)
+                    def repoExists = file("${repoDir}").exists()
 
                     // Clone GitHub repository only if not already cloned
                     if (!repoExists) {
@@ -50,9 +50,4 @@ pipeline {
             echo 'Build or ECR push failed'
         }
     }
-}
-
-// Function to check if directory exists
-def fileExists(filePath) {
-    return file(filePath).exists()
 }
