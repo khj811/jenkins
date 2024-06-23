@@ -44,7 +44,7 @@ pipeline {
 
                     // Update the image tag in values.yaml and push changes to the repository
                     sh "git pull origin main"
-                    sh "sed -i 's/imageTag: .*/imageTag: ${BUILD_NUMBER}/g' values.yaml"
+                    sh "sed -i 's/imageTag: .*/imageTag: ${BUILD_NUMBER}/g' jenkins/web-helm/values.yaml"
                     sh "git add values.yaml"
                     sh "git commit -m 'Update imageTag to ${BUILD_NUMBER}'"
                     sh "git push origin main"
