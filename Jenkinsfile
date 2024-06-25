@@ -4,7 +4,7 @@ pipeline {
     environment {
         NHN_DEFAULT_REGION = 'kr1'  // NCR Region
         NHN_REGISTRY_URL = '847f310f-kr1-registry.container.nhncloud.com/web-intro'  // NCR Registry URL
-        NCR_REPOSITORY = 'web-intro'
+        NCR_IMAGE_NAME = '${BUILD_NUMBER}'
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKERFILE_PATH = 'Dockerfile'
         DOCKER_IMAGE_NAME = 'web-intro'
