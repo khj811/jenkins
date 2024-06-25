@@ -20,9 +20,9 @@ pipeline {
                     def customImage = docker.build("${DOCKER_IMAGE_NAME}:${IMAGE_TAG}", "--no-cache=true -f ${DOCKERFILE_PATH} .")
 
                     // NHN Cloud NCR에 로그인 및 이미지 푸시
-                    sh "docker login ${NHN_REGISTRY_URL}/ -u ${NHN_ACCESS_KEY} -p ${NHN_SECRET_KEY}"
-                    sh "docker tag ${DOCKER_IMAGE_NAME}:${IMAGE_TAG} ${NHN_REGISTRY_URL}/${NCR_REPOSITORY}:${IMAGE_TAG}"
-                    sh "docker push ${NHN_REGISTRY_URL}/${NCR_REPOSITORY}:${IMAGE_TAG}"
+                    sh "docker login ${NHN_REGISTRY_URL} -u ${NHN_ACCESS_KEY} -p ${NHN_SECRET_KEY}"
+                    sh "docker tag ${DOCKER_IMAGE_NAME}:${IMAGE_TAG} ${NHN_REGISTRY_URL}:${IMAGE_TAG}"
+                    sh "docker push ${NHN_REGISTRY_URL}:${IMAGE_TAG}"
                 }
             }
         }
