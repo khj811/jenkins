@@ -9,7 +9,7 @@ pipeline {
         DOCKERFILE_PATH = 'Dockerfile'
         DOCKER_IMAGE_NAME = 'web-intro'
         NHN_ACCESS_KEY = '7rqKD7FlGMJGVRF1CXUa' // NHN Cloud Access Key
-        NHN_SECRET_KEY = 'oPO93P79HTZyf2Uo' // NHN Cloud Secret Key
+        NHN_SECRET_KEY = 'mrWm3aENfoxvEDuT' // NHN Cloud Secret Key
     }
 
     stages {
